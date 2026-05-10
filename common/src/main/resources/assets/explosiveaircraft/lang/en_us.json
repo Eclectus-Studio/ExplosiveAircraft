@@ -1,0 +1,11 @@
+{
+  "item.explosiveaircraft.diamond_bomb_bay": "Diamond Bomb Bay",
+  "item.explosiveaircraft.diamond_bomb_bay.description": "A reinforced bay that drops standard TNT. Reliable and durable.",
+
+  "item.explosiveaircraft.netherite_bomb_bay": "Netherite Bomb Bay",
+  "item.explosiveaircraft.netherite_bomb_bay.description": "The ultimate upgrade. Drops Strong TNT with 1.5x the explosive power!",
+
+  "entity.explosiveaircraft.strong_tnt": "Strong TNT",
+
+  "category.explosiveaircraft.tab": "Explosive Aircraft"
+}

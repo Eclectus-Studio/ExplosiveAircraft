@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "explosiveaircraft:diamond_bomb_bay"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "result": {
+    "id": "explosiveaircraft:netherite_bomb_bay"
+  }
+}

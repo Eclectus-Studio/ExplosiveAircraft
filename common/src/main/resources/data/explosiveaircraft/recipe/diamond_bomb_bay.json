@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "immersive_aircraft:bomb_bay"
+  },
+  "addition": {
+    "item": "minecraft:diamond"
+  },
+  "template": {
+    "item": "minecraft:smithing_table"
+  },
+  "result": {
+    "id": "explosiveaircraft:diamond_bomb_bay"
+  }
+}

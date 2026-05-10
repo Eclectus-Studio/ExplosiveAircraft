@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "explosiveaircraft"
+version = "${version}"
+displayName = "Explosive Aircraft"
+authors = "Eclectus Studio"
+description = '''
+Have more powerful bombs with bomb bay tiers
+'''
+logoFile="assets/explosiveaircraft/icon.png"
+
+[[dependencies.explosiveaircraft]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.explosiveaircraft]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.explosiveaircraft]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0.8,)"
+ordering = "BEFORE"
+side = "BOTH"
+
+[[dependencies.explosiveaircraft]]
+modId = "immersive_aircraft"
+type = "required"
+versionRange = "[1.4.3,)"
+ordering = "BEFORE"
+side = "BOTH"
+
+[[mixins]]
+config = "explosiveaircraft.mixins.json"

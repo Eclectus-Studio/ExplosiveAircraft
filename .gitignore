@@ -1,0 +1,92 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# VSCode
+.vscode/
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+
+# Architectury / Loom
+run/
+runs/
+remappedSrc/
+loom-cache/
+.loom/
+
+# Fabric
+fabric-server-launch.jar
+
+# NeoForge / Forge
+forge*launch*.log
+neoforge*launch*.log
+
+# Logs
+logs/
+*.log
+hs_err_pid*
+replay_pid*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Java
+*.class
+
+# Generated resources
+src/generated/
+
+# Runtime saves/configs
+saves/
+config/
+crash-reports/
+
+# Local env files
+.env
+.env.*
+
+# Mac/Linux temp
+*~
+.fuse_hidden*
+.directory
+
+# Windows temp
+ehthumbs.db
+Desktop.ini
+
+# Annotation processors
+apt_generated/
+
+# Maven
+target/
+
+# JARs produced by builds
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Gradle wrapper
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.properties
+
+# Keep source resources
+!src/**/build.gradle

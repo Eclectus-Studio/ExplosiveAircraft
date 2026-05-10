@@ -1,0 +1,119 @@
+name: Build & Publish
+
+on:
+  pull_request:
+    branches: [ main ]         # PRs into main must bump version
+  push:
+    branches: [ main ]         # Every push to main publishes the mod
+
+jobs:
+
+  # --------------------------------------------------------
+  # 1) VERSION CHECK ON PR
+  # --------------------------------------------------------
+  check_version:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Read version from main
+        id: mainver
+        run: |
+          VER=$(grep "^mod_version=" gradle.properties | cut -d'=' -f2)
+          echo "version=$VER" >> $GITHUB_OUTPUT
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          path: pr
+      - name: Read version from PR
+        id: prver
+        run: |
+          VER=$(grep "^mod_version=" pr/gradle.properties | cut -d'=' -f2)
+          echo "version=$VER" >> $GITHUB_OUTPUT
+      - name: Compare versions
+        run: |
+          MAIN=${{ steps.mainver.outputs.version }}
+          DEV=${{ steps.prver.outputs.version }}
+          if [ "$MAIN" = "$DEV" ]; then
+            echo "❌ ERROR: mod_version not incremented!"
+            exit 1
+          fi
+          echo "✔️ Version incremented — PR OK."
+
+  # --------------------------------------------------------
+  # 2) BUILD + PUBLISH ON PUSH TO MAIN
+  # --------------------------------------------------------
+  publish:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build mod
+        # Architectury will build common, fabric, and neoforge subprojects
+        run: ./gradlew build
+
+      - name: Extract Mod Version
+        id: modversion
+        run: |
+          VER=$(grep "^mod_version=" gradle.properties | cut -d'=' -f2)
+          echo "version=$VER" >> $GITHUB_OUTPUT  
+
+      # --------------------------------------------------------
+      # Publish to Modrinth, CurseForge, and GitHub Release
+      # --------------------------------------------------------
+      - name: Publish Mod Files
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          # --- Authentication ---
+          modrinth-id: explosiveaircraft
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1539363
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # --- Files and Metadata ---
+          # Glob patterns to pick up the final JARs from subproject build folders
+          files: |
+            fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
+            neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+
+          name: Explosive Aircraft ${{ steps.modversion.outputs.version }}
+          version: ${{ steps.modversion.outputs.version }}
+          version-type: release
+          changelog-file: CHANGELOG.*
+
+          # --- Game Compatibility ---
+          loaders: |
+            fabric
+            neoforge
+          game-versions: |
+            1.21.1
+          java: |
+            21
+
+          # --- Dependencies ---
+          # Requires Architectury API and Immersive Aircraft
+          dependencies: |
+            architectury-api (required)
+            immersive-aircraft (required)
+
+          retry-attempts: 2
+          retry-delay: 10000
+          fail-mode: fail
