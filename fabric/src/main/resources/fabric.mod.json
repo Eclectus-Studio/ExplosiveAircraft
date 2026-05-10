@@ -10,7 +10,7 @@
   "contact": {
     "homepage": ""
   },
-  "license": "All-Rights-Reserved",
+  "license": "MIT License",
   "icon": "assets/explosiveaircraft/icon.png",
   "environment": "*",
   "entrypoints": {
