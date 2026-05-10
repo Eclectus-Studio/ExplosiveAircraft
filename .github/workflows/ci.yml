@@ -2,15 +2,11 @@ name: Build & Publish
 
 on:
   pull_request:
-    branches: [ main ]         # PRs into main must bump version
+    branches: [ main ]
   push:
-    branches: [ main ]         # Every push to main publishes the mod
+    branches: [ main ]
 
 jobs:
-
-  # --------------------------------------------------------
-  # 1) VERSION CHECK ON PR
-  # --------------------------------------------------------
   check_version:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
@@ -44,9 +40,6 @@ jobs:
           fi
           echo "✔️ Version incremented — PR OK."
 
-  # --------------------------------------------------------
-  # 2) BUILD + PUBLISH ON PUSH TO MAIN
-  # --------------------------------------------------------
   publish:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -66,7 +59,6 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build mod
-        # Architectury will build common, fabric, and neoforge subprojects
         run: ./gradlew build
 
       - name: Extract Mod Version
@@ -76,44 +68,55 @@ jobs:
           echo "version=$VER" >> $GITHUB_OUTPUT  
 
       # --------------------------------------------------------
-      # Publish to Modrinth, CurseForge, and GitHub Release
+      # 1) Publish FABRIC
       # --------------------------------------------------------
-      - name: Publish Mod Files
+      - name: Publish Fabric
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          # --- Authentication ---
           modrinth-id: explosiveaircraft
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1539363
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-          # --- Files and Metadata ---
-          # Glob patterns to pick up the final JARs from subproject build folders
-          files: |
-            fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
-            neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+          # Only pick up the Fabric JAR
+          files: fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
 
-          name: Explosive Aircraft ${{ steps.modversion.outputs.version }}
-          version: ${{ steps.modversion.outputs.version }}
+          name: "[Fabric] Explosive Aircraft ${{ steps.modversion.outputs.version }}"
+          version: ${{ steps.modversion.outputs.version }}+fabric
           version-type: release
           changelog-file: CHANGELOG.*
 
-          # --- Game Compatibility ---
-          loaders: |
-            fabric
-            neoforge
-          game-versions: |
-            1.21.1
-          java: |
-            21
-
-          # --- Dependencies ---
-          # Requires Architectury API and Immersive Aircraft
+          loaders: fabric
+          game-versions: 1.21.1
+          java: 21
           dependencies: |
             architectury-api (required)
             immersive-aircraft (required)
 
-          retry-attempts: 2
-          retry-delay: 10000
-          fail-mode: fail
+      # --------------------------------------------------------
+      # 2) Publish NEOFORGE
+      # --------------------------------------------------------
+      - name: Publish NeoForge
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: explosiveaircraft
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          curseforge-id: 1539363
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Only pick up the NeoForge JAR
+          files: neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+
+          name: "[NeoForge] Explosive Aircraft ${{ steps.modversion.outputs.version }}"
+          version: ${{ steps.modversion.outputs.version }}+neoforge
+          version-type: release
+          changelog-file: CHANGELOG.*
+
+          loaders: neoforge
+          game-versions: 1.21.1
+          java: 21
+          dependencies: |
+            architectury-api (required)
+            immersive-aircraft (required)
