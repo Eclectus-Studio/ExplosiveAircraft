@@ -1,1 +1,1 @@
-Updated licenses
+fixed ci causing the default uploaded version to crash on boot

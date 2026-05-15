@@ -80,7 +80,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
           # Only pick up the Fabric JAR
-          files: fabric/build/libs/!(*-@(dev|sources|javadoc)).jar
+          files: |
+            fabric/build/libs/*.jar
+            !fabric/build/libs/*-dev.jar
+            !fabric/build/libs/*-sources.jar
+            !fabric/build/libs/*-dev-shadow.jar
 
           name: "[Fabric] Explosive Aircraft ${{ steps.modversion.outputs.version }}"
           version: ${{ steps.modversion.outputs.version }}+fabric
@@ -107,7 +111,11 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
           # Only pick up the NeoForge JAR
-          files: neoforge/build/libs/!(*-@(dev|sources|javadoc)).jar
+          files: |
+            fabric/build/libs/*.jar
+            !fabric/build/libs/*-dev.jar
+            !fabric/build/libs/*-sources.jar
+            !fabric/build/libs/*-dev-shadow.jar
 
           name: "[NeoForge] Explosive Aircraft ${{ steps.modversion.outputs.version }}"
           version: ${{ steps.modversion.outputs.version }}+neoforge
