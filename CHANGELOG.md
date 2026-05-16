@@ -1,1 +1,1 @@
-fixed ci causing the default uploaded version to crash on boot and mod not working on server
+correct jar
