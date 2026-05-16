@@ -15,7 +15,6 @@ public final class ExplosiveAircraft {
         ExplosiveAircraftItems.init();
         ExplosiveAircraftCreativeTabs.init();
         ExplosiveAircraftEntities.init();
-        ExplosiveAircraftClient.init();
         ExplosiveAircraftWeapons.init();
         ExplosiveAircraftWeaponsRenderer.init();
     }

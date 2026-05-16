@@ -112,10 +112,10 @@ jobs:
 
           # Only pick up the NeoForge JAR
           files: |
-            fabric/build/libs/*.jar
-            !fabric/build/libs/*-dev.jar
-            !fabric/build/libs/*-sources.jar
-            !fabric/build/libs/*-dev-shadow.jar
+            neoforge/build/libs/*.jar
+            !neoforge/build/libs/*-dev.jar
+            !neoforge/build/libs/*-sources.jar
+            !neoforge/build/libs/*-dev-shadow.jar
 
           name: "[NeoForge] Explosive Aircraft ${{ steps.modversion.outputs.version }}"
           version: ${{ steps.modversion.outputs.version }}+neoforge

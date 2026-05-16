@@ -34,38 +34,38 @@ public class StrongTNTEntity extends PrimedTnt {
     public void tick() {
         this.handlePortal();
         this.applyGravity();
+
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.setDeltaMovement(this.getDeltaMovement().scale(0.98));
 
         if (this.onGround()) {
-            this.setDeltaMovement(
-                    this.getDeltaMovement().multiply(0.7, -0.5, 0.7)
-            );
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.7, -0.5, 0.7));
         }
 
-        int i = this.getFuse() - 1;
-        this.setFuse(i);
+        int fuse = this.getFuse() - 1;
+        this.setFuse(fuse);
 
-        if (i <= 0) {
-            this.discard();
-
+        if (fuse <= 0) {
             if (!this.level().isClientSide) {
-                explodeCustom();
+                this.explodeCustom();
             }
-        } else {
-            this.updateInWaterStateAndDoFluidPushing();
 
-            if (this.level().isClientSide) {
-                this.level().addParticle(
-                        ParticleTypes.SMOKE,
-                        this.getX(),
-                        this.getY() + 0.5D,
-                        this.getZ(),
-                        0.0D,
-                        0.0D,
-                        0.0D
-                );
-            }
+            this.discard();
+            return;
+        }
+
+        this.updateInWaterStateAndDoFluidPushing();
+
+        if (this.level().isClientSide) {
+            this.level().addParticle(
+                    ParticleTypes.SMOKE,
+                    this.getX(),
+                    this.getY() + 0.5D,
+                    this.getZ(),
+                    0.0D,
+                    0.0D,
+                    0.0D
+            );
         }
     }
 }
