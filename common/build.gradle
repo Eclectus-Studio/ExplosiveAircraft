@@ -8,5 +8,5 @@ dependencies {
     // Do NOT use other classes from Fabric Loader.
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modImplementation("net.conczin:immersive_aircraft:${rootProject.immersive_aircraft_version}+common")
-    modApi "dev.architectury:architectury:21.0.2"
+    modApi "dev.architectury:architectury:21.0.6"
 }
